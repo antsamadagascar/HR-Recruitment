@@ -140,6 +140,7 @@ class CV_Controller extends CI_Controller {
                 foreach ($data['qualite_nom'] as $key => $qualite) {
                     $qualiteData = [
                         'idprofil' => $data['idprofil'][$key],
+                        'idcandidat' =>$idCandidat,
                         'nomqualite' => $qualite,
                         'experiencetechnique' => $data['experience_technique'][$key],
                         'experiencegenerale' => $data['experience_generale'][$key]
@@ -153,7 +154,7 @@ class CV_Controller extends CI_Controller {
                 'idannonce' => $idAnnonce,
                 'idcv' => $idCV,
                 'datecandidature' => date('Y-m-d'),
-                'statutcandidature' => 'En attente'
+                'statutcandidature' => 'en_attente'
             ];
             $this->Candidature_Model->insert_candidature($candidatureData);
     

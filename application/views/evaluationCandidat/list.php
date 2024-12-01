@@ -167,7 +167,7 @@
                             
                             <!-- Affichage du statut de validation en fonction de la note -->
                             <td>
-                                <?php if ($evaluation->notes >= 50): ?>
+                                <?php if ($evaluation->notes >= 26): ?>
                                     <span class="valid-message">Validé</span>
                                 <?php else: ?>
                                     <span class="refused-message">Refusé</span>

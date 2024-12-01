@@ -103,6 +103,7 @@
     CREATE TABLE Qualite (
         id SERIAL PRIMARY KEY,
         idProfil INT REFERENCES ProfilRequis(id) ON DELETE CASCADE,
+        idCandidat INT REFERENCES Candidat(id) ON DELETE CASCADE,
         nomQualite VARCHAR(255),
         experienceTechnique INT,
         experienceGenerale INT
@@ -160,7 +161,7 @@
         idAnnonce INT REFERENCES Annonce(id) ON DELETE CASCADE,
         idCV INT REFERENCES CV(id) ON DELETE CASCADE,
         dateCandidature DATE NOT NULL DEFAULT CURRENT_DATE,
-        statutCandidature VARCHAR(50) DEFAULT 'En attente',
+        statutCandidature VARCHAR(50) DEFAULT 'en_attente',
         UNIQUE (idCandidat, idAnnonce) 
     );
     
@@ -211,17 +212,17 @@
     );
     
     CREATE TABLE FicheDePaie (
-    id SERIAL PRIMARY KEY,
-    idEmploye INT REFERENCES Candidat(id) ON DELETE CASCADE,
-    annee INT NOT NULL,
-    mois INT NOT NULL,
-    salaireBrut NUMERIC(10, 2) CHECK (salaireBrut >= 0),
-    cotisations NUMERIC(10, 2) CHECK (cotisations >= 0),
-    salaireNet NUMERIC(10, 2) CHECK (salaireNet >= 0),
-    primes NUMERIC(10, 2) DEFAULT 0,
-    heuresSupplementaires NUMERIC(10, 2) DEFAULT 0,
-    joursCongesPayes NUMERIC(5, 2) DEFAULT 0,
-    dateGeneration TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        id SERIAL PRIMARY KEY,
+        idEmploye INT REFERENCES Candidat(id) ON DELETE CASCADE,
+        annee INT NOT NULL,
+        mois INT NOT NULL,
+        salaireBrut NUMERIC(10, 2) CHECK (salaireBrut >= 0),
+        cotisations NUMERIC(10, 2) CHECK (cotisations >= 0),
+        salaireNet NUMERIC(10, 2) CHECK (salaireNet >= 0),
+        primes NUMERIC(10, 2) DEFAULT 0,
+        heuresSupplementaires NUMERIC(10, 2) DEFAULT 0,
+        joursCongesPayes NUMERIC(5, 2) DEFAULT 0,
+        dateGeneration TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 

@@ -3,46 +3,66 @@ class FicheDePaie_Model extends CI_Model
 {
 
     public function genererFicheDePaie($idEmploye, $mois, $annee) {
-        $this->db->select('c.nom, c.prenom, e.salaire, e.datedebut');
-        $this->db->from('embauche e');
-        $this->db->join('candidat c', 'c.id = e.idcandidat');
-        $this->db->where('e.idcandidat', $idEmploye);
-    
-        $query = $this->db->get();
-        $employeInfo = $query->row();
-    
-        if ($employeInfo) {
-            $cotisations = 0.25 * $employeInfo->salaire;
-            $salaireNet = $employeInfo->salaire - $cotisations;
-            $primes = $this->calculerPrimes($employeInfo->datedebut, $employeInfo->salaire);
-    
-            $joursCongesPayes = $this->db->query("
-                SELECT SUM(nombreJours) AS joursConges
-                FROM DemandeConge
-                WHERE idEmploye = ?
-                AND statut = 'Approuvé'
-                AND EXTRACT(MONTH FROM dateDebut) = ?
-                AND EXTRACT(YEAR FROM dateDebut) = ?
-            ", [$idEmploye, $mois, $annee])->row()->joursConges ?? 0;
+    // Récupérer les informations de l'employé
+    $this->db->select('c.nom, c.prenom, e.salaire, e.datedebut');
+    $this->db->from('embauche e');
+    $this->db->join('candidat c', 'c.id = e.idcandidat');
+    $this->db->where('e.idcandidat', $idEmploye);
 
-            $data = [
-                'idemploye' => $idEmploye,
-                'annee' => $annee,
-                'mois' => $mois,
-                'salairebrut' => $employeInfo->salaire,
-                'cotisations' => $cotisations,
-                'salairenet' => $salaireNet,
-                'primes' => $primes,
-                'jourscongespayes' => $joursCongesPayes,
-                'dategeneration' => date('Y-m-d H:i:s'),
-            ];
-    
-            $this->db->insert('fichedepaie', $data);
-            return $this->db->insert_id();
-        }
-    
-        return false;
+    $query = $this->db->get();
+    $employeInfo = $query->row();
+
+    if ($employeInfo) {
+        $salaireBrut = $employeInfo->salaire;
+
+        // Calcul des cotisations sociales (25% du salaire brut)
+        $cotisations = 0.25 * $salaireBrut;
+
+        // Calcul des primes
+        $primes = $this->calculerPrimes($employeInfo->datedebut, $salaireBrut);
+
+        // Récupérer les jours d'absence (jours de congé approuvés pour le mois et l'année spécifiés)
+        $joursAbsences = $this->db->query("
+            SELECT SUM(nombreJours) AS joursAbsences
+            FROM DemandeConge
+            WHERE idEmploye = ?
+            AND statut = 'Approuvé'
+            AND EXTRACT(MONTH FROM dateDebut) = ?
+            AND EXTRACT(YEAR FROM dateDebut) = ?
+        ", [$idEmploye, $mois, $annee])->row()->joursAbsences ?? 0;
+
+        // Calcul du taux journalier
+        $tauxJournalier = $salaireBrut / 30;
+
+        // Calcul du salaire brut ajusté (en tenant compte des absences)
+        $salaireBrutAjuste = $salaireBrut - ($joursAbsences * $tauxJournalier);
+
+        // Calcul du salaire net en tenant compte des cotisations sociales et primes
+        $salaireNet = $salaireBrutAjuste - $cotisations + $primes;
+
+        // Préparer les données à insérer dans la table 'fichedepaie'
+        $data = [
+            'idemploye' => $idEmploye,
+            'annee' => $annee,
+            'mois' => $mois,
+            'salairebrut' => $salaireBrut,
+            'cotisations' => $cotisations,
+            'salairenet' => $salaireNet,
+            'primes' => $primes,
+            'jourscongespayes' => $joursAbsences,  // Jours de congés payés/absences approuvés
+            'dategeneration' => date('Y-m-d H:i:s'),
+        ];
+
+        // Insérer les données dans la table 'fichedepaie'
+        $this->db->insert('fichedepaie', $data);
+
+        // Retourner l'ID de la nouvelle fiche de paie
+        return $this->db->insert_id();
     }
+
+    return false;
+}
+
 
     public function getFicheDePaie($idFiche) {
         $this->db->select('

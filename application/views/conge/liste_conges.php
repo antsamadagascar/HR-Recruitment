@@ -243,7 +243,6 @@ h1::after {
             <tr>
                 <th>ID</th>
                 <th>Employé</th>
-                <th>Type de Congé</th>
                 <th>Date Début</th>
                 <th>Date Fin</th>
                 <th>Nombre de Jours</th>
@@ -259,7 +258,6 @@ h1::after {
                     <tr>
                         <td><?php echo $demande->id; ?></td>
                         <td><?php echo $demande->nomemploye . ' ' . $demande->prenomemploye; ?></td>
-                        <td><?php echo $demande->typeconge; ?></td>
                         <td><?php echo $demande->datedebut; ?></td>
                         <td><?php echo $demande->datefin; ?></td>
                         <td><?php echo $demande->nombrejours; ?></td>

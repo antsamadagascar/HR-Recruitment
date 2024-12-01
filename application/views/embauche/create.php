@@ -9,9 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <style>
         /* Custom styles for the form */
-        .container {
-            margin-top: 30px;
-        }
+       
 
         .form-container {
             background-color: #f4f7fc;

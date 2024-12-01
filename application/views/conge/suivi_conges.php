@@ -148,26 +148,22 @@ tbody td:nth-child(8) {
     <thead>
         <tr>
             <th>Employé</th>
-            <th>Type de Congé</th>
             <th>Année</th>
             <th>Total Alloué</th>
             <th>Jours Utilisés</th>
-            <th>Total Jours Pris</th>
-            <th>Solde Final</th>
-            <th>Dernier Congé Pris</th>
+            <th>Total Jours restants</th>
+            <th>Date attribution droit</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($conges as $conge): ?>
             <tr>
                 <td><?= $conge->nom_employe . ' ' . $conge->prenom_employe ?></td>
-                <td><?= $conge->type_conge ?></td>
                 <td><?= $conge->annee ?></td>
                 <td><?= $conge->total_jours_alloues ?></td>
                 <td><?= $conge->jours_utilises ?></td>
-                <td><?= $conge->total_jours_pris ?></td>
-                <td><?= $conge->solde_final ?></td>
-                <td><?= $conge->derniere_date_conge ?></td>
+                <td><?= $conge->jours_restants ?></td>
+                <td><?= $conge->datecalcul ?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

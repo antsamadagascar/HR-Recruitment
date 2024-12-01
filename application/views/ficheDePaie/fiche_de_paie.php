@@ -151,6 +151,8 @@
 
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Chargez jQuery ici -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
     $(document).ready(function() {
         $('#exportPdf').click(function() {
@@ -166,13 +168,51 @@
             doc.setFontSize(18);
             doc.text(titre, 20, 20); // Ajouter le titre en haut à gauche
 
-            // Ajouter le contenu de la fiche de paie au PDF
-            doc.setFontSize(12);
-            var content = $('.fiche-paie').text();  // Récupère le texte brut de la fiche de paie
+            // Mise en page de la fiche de paie dans l'ordre
+            let yPosition = 30; // Position de départ pour le contenu
 
-            // Diviser le contenu pour l'ajouter en plusieurs pages si nécessaire
-            var lines = doc.splitTextToSize(content, 180); // Limite la largeur du texte
-            doc.text(lines, 20, 30); // Ajouter le texte à partir de la position 20, 30
+            // Informations du candidat
+            doc.setFontSize(14);
+            doc.text('Informations du Candidat', 20, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(12);
+            doc.text('Nom : ' + $("#nom").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Prénom : ' + $("#prenom").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Date d\'Embauche : ' + $("#dateEmbauche").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Ancienneté : ' + $("#anciennete").text().trim(), 20, yPosition);
+            yPosition += 12;  // Espace avant la section suivante
+
+            // Détails de la paie
+            doc.setFontSize(14);
+            doc.text('Détails de la Paie', 20, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(12);
+            doc.text('Salaire Brut : ' + $("#salairebrut").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Salaire de Base : ' + $("#salairebase").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Cotisations Sociales : ' + $("#cotisations").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Salaire Net : ' + $("#salairenet").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Primes : ' + $("#primes").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Taux Journalier : ' + $("#tauxjournalier").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Taux Horaire : ' + $("#tauxhoraire").text().trim(), 20, yPosition);
+            yPosition += 6;
+            doc.text('Jours de Congés Payés : ' + $("#joursconges").text().trim(), 20, yPosition);
+            yPosition += 12;  // Espace avant la section suivante
+
+            // Footer avec la date de génération
+            doc.setFontSize(10);
+            doc.text('Date de génération : ' + $("#dategeneration").text().trim(), 20, yPosition);
+            yPosition += 6;
 
             // Sauvegarder le fichier PDF
             doc.save(idCandidat + "_Fiche_de_Paie_" + datePaie + ".pdf");

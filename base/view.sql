@@ -37,7 +37,7 @@ WHERE
 ---
 -- vue pour recuperer les listes des contrats pour un candidat specifique 
 ---
-CREATE VIEW get_all_contrat_after_embauche AS
+CREATE OR REPLACE VIEW get_all_contrat_after_embauche AS
 SELECT 
     e.id AS idEmbauche,
     e.idCandidat,
@@ -62,7 +62,7 @@ select * from get_all_contrat_after_embauche where idCandidat =1;
 ---
 -- vue qui retourne les reponse apres un envoye des cv 
 --
-CREATE VIEW get_reponse_cv AS
+CREATE OR REPLACE VIEW get_reponse_cv AS
 SELECT 
     c.id AS idCandidat,
     c.nom,
@@ -88,7 +88,7 @@ LEFT JOIN
 ---
 -- Vue pour Vérifier les Candidatures en Double
 ---
-CREATE VIEW get_candidature_count_per_candidat_annonce AS
+CREATE OR REPLACE VIEW get_candidature_count_per_candidat_annonce AS
 SELECT 
     idCandidat,
     idAnnonce,
@@ -107,7 +107,7 @@ SELECT * FROM get_candidature_count_per_candidat_annonce WHERE idCandidat = 1 AN
 ----
 -- DETAILLES CANDIDAT
 ---
-CREATE VIEW candidate_details AS
+CREATE OR REPLACE VIEW candidate_details AS
 SELECT 
     c.id AS candidat_id,
     c.nom AS candidat_nom,
@@ -234,7 +234,7 @@ FROM
 ---
 -- profil requis (ilay tedaviny entreprise)
 --- 
-CREATE VIEW ProfilRequisEntreprise AS
+CREATE OR REPLACE VIEW ProfilRequisEntreprise AS
 SELECT 
     pr.id AS profil_id,
     pr.nomProfil AS profil_requis,
@@ -251,10 +251,10 @@ SELECT
     bt.nombreDePostes AS nombre_postes
    -- bt.status AS status_besoin
 FROM ProfilRequis pr
-LEFT JOIN Qualite q ON pr.id = q.idProfil
-LEFT JOIN Poste post ON pr.idPoste = post.id
-LEFT JOIN Branche b ON post.idBranche = b.id
-LEFT JOIN BesoinsEnTalent bt ON pr.id = bt.idProfile
+ JOIN Qualite q ON pr.id = q.idProfil
+ JOIN Poste post ON pr.idPoste = post.id
+ JOIN Branche b ON post.idBranche = b.id
+ JOIN BesoinsEnTalent bt ON pr.id = bt.idProfile
 WHERE bt.nombreDePostes >0
 ;
 
@@ -287,6 +287,46 @@ GROUP BY
     c.id,
     c.nom,
     c.prenom;
+
+--CREATE OR REPLACE VIEW ProfilCandidats AS
+SELECT 
+    c.id AS candidat_id,
+    c.nom AS nom_candidat,
+    c.prenom AS prenom_candidat,
+	cand.statutCandidature,
+
+    -- Agrégation des qualités distinctes pour le candidat
+    STRING_AGG(DISTINCT q.nomQualite, ', ') AS qualites_requises,
+    
+    -- Récupération des niveaux d'expérience maximum en technique et général pour chaque candidat
+    COALESCE(MAX(q.experienceTechnique), 0) AS qualite_experience_technique,
+    COALESCE(MAX(q.experienceGenerale), 0) AS qualite_experience_generale,
+STRING_AGG(DISTINCT com.description, ', ') AS competence_description,
+    STRING_AGG(DISTINCT com.niveau, ', ') AS competence_niveau,
+    -- Agrégation des compétences du candidat avec leurs niveaux correspondants
+    STRING_AGG(DISTINCT com.description || ' (' || com.niveau || ')', ', ') AS competences,
+
+    -- Récupération du profil requis pour le candidat
+    MAX(pr.nomProfil) AS profil_requis,
+
+    -- Statut de la candidature
+    MAX(cand.statutCandidature) AS statut_candidature
+
+FROM Candidat c
+LEFT JOIN CV cv ON c.id = cv.idCandidat
+LEFT JOIN Competence com ON c.id = com.idCandidat
+LEFT JOIN Candidature cand ON c.id = cand.idCandidat
+LEFT JOIN Annonce an ON cand.idAnnonce = an.id
+LEFT JOIN BesoinsEnTalent bt ON an.idBesoinEnTalent = bt.id
+LEFT JOIN ProfilRequis pr ON pr.id = bt.idProfile
+LEFT JOIN Qualite q ON q.idProfil = pr.id AND q.idCandidat = c.id
+
+WHERE c.etat < 0 -- Filtrage des candidats inactifs
+GROUP BY 
+    c.id,
+    c.nom,
+    c.prenom,
+	cand.statutcandidature;
 
 ---
 -- cv candidat valider
@@ -364,7 +404,7 @@ WHERE
 ---
 -- Liste congees En Attente
 ---
-CREATE VIEW v_demande_conge AS
+CREATE OR REPLACE VIEW v_demande_conge AS
 SELECT 
     dc.id,
     dc.idemploye,
@@ -450,7 +490,7 @@ WHERE
 ---
 -- check cv valider (valdier,true)
 ---
-CREATE VIEW CheckCvValideEtNonEmbauche AS
+CREATE OR REPLACE VIEW CheckCvValideEtNonEmbauche AS
 SELECT 
     c.id AS idCandidat,
     c.nom AS nomCandidat,

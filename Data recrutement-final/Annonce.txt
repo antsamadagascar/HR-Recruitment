@@ -1,0 +1,5 @@
+Titre : Offre d'emploi Développeur Front-end Junior
+Description : Nous recherchons un développeur front-end junior passionné pour rejoindre notre équipe. Le candidat travaillera sur le développement et la maintenance d'interfaces utilisateur modernes.
+Date de début : 2024-08-01
+Date de fin : 2024-09-30
+Est une annonce officielle : False

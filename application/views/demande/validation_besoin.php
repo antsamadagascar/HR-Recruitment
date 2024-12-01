@@ -255,6 +255,7 @@
             <span id="alertMessage"></span>
         </div>
     </div>
+    <h2 style="text-align:center;">Accun promotion disponnible pour ce poste </h2>
 
     <script src="<?php echo site_url('template/assets/js/bootstrap.bundle.min.js'); ?>"></script>
     <script>

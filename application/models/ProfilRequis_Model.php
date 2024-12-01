@@ -62,7 +62,7 @@ public function get_all_profilrequis() {
 
 // Fonction pour récupérer les données de la vue ProfilRequisEntreprise
 public function getProfilRequisEntreprise() {
-    $query = $this->db->get('profilrequisentreprise'); // Exemple de requête
+    $query = $this->db->get('profilrequisentreprise'); 
     return $query->num_rows() > 0 ? $query->result() : [];
 }
 
@@ -70,7 +70,7 @@ public function getProfilRequisEntreprise() {
 public function getProfilCandidats() {
     $this->db->select('*');
     $this->db->from('profilcandidats '); 
-    $this->db->where('statutcandidature', 'En attente');
+    $this->db->where('statutcandidature', 'en_attente');
 
     $query = $this->db->get();
 

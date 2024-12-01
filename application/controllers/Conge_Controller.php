@@ -87,7 +87,7 @@ class Conge_Controller extends CI_Controller {
     public function afficher_suivi_conges() {
         $data['pagetitle'] = 'Suivi et Gestion des Congés';
         $data['contents']= 'conge/suivi_conges';
-        $query = $this->db->get('v_suivi_conge_employes');
+        $query = $this->db->get('vuedroitsconge');
         $data['conges'] = $query->result(); 
         $this->load->view('templates/template_rh', $data);
     }

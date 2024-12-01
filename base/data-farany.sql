@@ -1,35 +1,20 @@
 -- Insérer des données dans la table Branche
 INSERT INTO Branche (nomBranche) VALUES 
-('Informatique'),
-('Ressources Humaines'),
-('Marketing');
+('Informatique');
 
 -- Insérer des données dans la table Poste
 INSERT INTO Poste (idBranche, nomPoste, description) VALUES 
-(1, 'Développeur Web', 'Développement de sites et applications web'),
-(1, 'Administrateur Système', 'Gestion des infrastructures systèmes'),
-(2, 'Chargé de Recrutement', 'Recrutement et gestion de talents'),
-(3, 'Responsable Marketing', 'Gestion des campagnes marketing');
+(1, 'Développeur Web', 'Développement de sites et applications web');
 
 INSERT INTO ProfilRequis (idPoste, nomProfil, description,experienceTechnique,experienceGenerale) VALUES 
-(1, 'Développeur Front-end', 'Expérience en HTML, CSS, JavaScript',4,5),
-(1, 'Développeur Back-end', 'Expérience en Node.js, PHP, et bases de données',3,5),
-(3, 'Recruteur Confirmé', 'Expérience en recrutement et entretien de candidats',5,4),
-(4, 'Chef de Projet Marketing', 'Compétences en gestion de campagnes et branding',4,5);
+(1, 'Développeur Front-end', 'Expérience en HTML, CSS, JavaScript',4,5);
 
 
 INSERT INTO BesoinsEnTalent (idProfile, dateBesoin, nombreDePostes) VALUES 
-(1, '2024-01-15', 2),
-(2, '2024-03-01', 1),
-(3, '2024-05-10', 1),
-(4, '2024-06-20', 3);
+(1, '2024-12-02', 2);
 
 INSERT INTO Annonce (idProfile, idBesoinEnTalent, titre, description, dateDebut, dateFin, isAnnonce) VALUES 
-(1, 1, 'Recrutement Développeur Front-end', 'Nous recherchons un développeur front-end avec expérience en frameworks modernes.', '2024-01-01', '2024-02-15', true),
-(2, 2, 'Recrutement Développeur Back-end', 'Nous recherchons un développeur back-end avec compétences en Node.js et PHP.', '2024-02-01', '2024-03-15', true),
-(3, 3, 'Chargé de Recrutement', 'Poste à pourvoir pour un chargé de recrutement dans notre équipe RH.', '2024-04-01', '2024-05-15', true),
-(4, 4, 'Responsable Marketing', 'Responsable pour la gestion des campagnes marketing nationales.', '2024-05-01', '2024-06-30', true);
-
+(1, 1, 'Recrutement Développeur Front-end', 'Nous recherchons un développeur front-end avec expérience en frameworks modernes.', '2024-01-01', '2024-02-15', false);
 
 -- Insertions initiales pour les types de congés
 INSERT INTO TypeConge (nom, description, dureeMaximale, estPaye) VALUES
@@ -65,6 +50,7 @@ INSERT INTO Candidat (nom, prenom, motDePasse, adresse, dateNaissance, nationali
 ('RABETOKOTANY', 'James', MD5('1234'),  '456 Avenue des Champs', '1985-11-23', 'Française', 'James@gmail.com', '0987654321',-1),
 ('ANDRIANARIVO', 'Mbola', MD5('1234'), '789 Avenue de la Liberté', '1992-07-30', 'Malagasy', 'mbola.andrianarivo@gmail.com', '0345678901', -1),
 ('RAZAFINDRABE', 'Liva', MD5('1234'), '101 Boulevard du 13 Mai', '1988-12-10', 'Malagasy', 'liva.razafindrabe@gmail.com', '0345987654', -1),
+
 ('RATSIMBA', 'Tahina', MD5('1234'), '15 Rue de l''Indépendance', '1994-02-20', 'Malagasy', 'tahina.ratsimba@gmail.com', '0324598765', -1),
 ('RAKOTOMALALA', 'Jean Claude', MD5('1234'), '34 Avenue des Fleurs', '1980-09-10', 'Malagasy', 'jeanclaude.rakotomalala@gmail.com', '0332456789', -1),
 ('RABELO', 'Sariaka', MD5('1234'), '56 Rue de la Mer', '1995-11-05', 'Malagasy', 'sariaka.rabelo@gmail.com', '0326598741', -1),
@@ -79,10 +65,10 @@ INSERT INTO Candidat (nom, prenom, motDePasse, adresse, dateNaissance, nationali
 
 -- Insérer des données dans la table CV
 INSERT INTO CV (idCandidat, isValider, dateValidation,status) VALUES 
-(7, FALSE, NULL,'en_attente'),
-(8, FALSE, NULL,'en_attente'),
-(9, FALSE, NULL,'en_attente'),
-(10, FALSE, NULL,'en_attente'),
+(7, TRUE, '2024-01-05','valider'),
+(8, TRUE, '2024-02-06','valider'),
+(9, TRUE, '2024-02-13','valider'),
+(10, TRUE, '2024-01-05','valider'),
 
 (11, FALSE, NULL,'en_attente'),
 (12, FALSE, NULL,'en_attente'),
@@ -94,6 +80,25 @@ INSERT INTO CV (idCandidat, isValider, dateValidation,status) VALUES
 (16, TRUE,'2024-02-01','valider'),
 (17, TRUE, '2024-02-11','valider'),
 (18, TRUE, '2024-04-21','valider');
+
+--CANDIDATURE    
+INSERT INTO Candidature (idCandidat,idAnnonce,idCV,dateCandidature,statutCandidature) VALUES
+(7,1,1,'2024-01-05','accepter'),
+(8,1,2,'2024-02-06','accepter'),
+(9,1,3,'2024-02-13','accepter'),
+(10,1,4,'2024-01-05','accepter'),
+
+--candidature en attente
+(11,1,5,'2024-02-06','en_attente'),
+(12,1,6,'2024-02-13','en_attente'),
+(13,1,7,'2024-02-13','en_attente'),
+(14,1,8,'2024-02-13','en_attente'),
+
+--candidature efa taloha
+(15,1,9,'2024-01-05','accepter'),
+(16,1,10,'2024-02-06','accepter'),
+(17,1,11,'2024-02-13','accepter'),
+(18,1,12,'2024-04-25','accepter');
 
 -- Insertion des compétences
 INSERT INTO Competence (idCandidat, description, niveau) VALUES
@@ -127,29 +132,10 @@ INSERT INTO Experience (idCandidat, entreprise, poste, dateDebut, dateFin) VALUE
 
 
 INSERT INTO Qualite(idProfil,idCandidat,nomQualite,experienceTechnique,experienceGenerale) VALUES 
-(1,11,'Dynamique et rigorieux',5,4),
-(1,12,'Bonne gestions de projet',3,4),
-(1,13,'Sociable et curieux',3,4),
-(1,14,'Maitre en html',5,4);
-
---CANDIDATURE    
-INSERT INTO Candidature (idCandidat,idAnnonce,idCV,dateCandidature,statutCandidature) VALUES
-('7',1,9,'2024-01-05','accepter'),
-('8',1,10,'2024-02-06','accepter'),
-('9',1,11,'2024-02-13','accepter'),
-('10',1,9,'2024-01-05','accepter'),
-
---candidature en attente
-('11',1,10,'2024-02-06','en_attente'),
-('12',1,11,'2024-02-13','en_attente'),
-('13',1,11,'2024-02-13','en_attente'),
-('14',1,11,'2024-02-13','en_attente'),
-
---candidature efa taloha
-('15',1,9,'2024-01-05','accepter'),
-('16',1,10,'2024-02-06','accepter'),
-('17',1,11,'2024-02-13','accepter'),
-('18',1,12,'2024-04-25','accepter');
+(1,11,'Dynamique et rigorieux',2,3),
+(1,12,'Bonne gestions de projet',2,3),
+(1,13,'Sociable et curieux',2,5),   
+(1,14,'Maitre en html',2,5);
 
 
 -- Insérer des données dans la table Embauche
@@ -159,13 +145,19 @@ INSERT INTO Embauche (idCandidat, idContrat, dateDebut, dateFin, salaire, isEmba
 (17, 2, '2024-02-13', '2024-07-01', 1000000.00, TRUE,TRUE),
 (18, 2, '2024-04-25', '2024-10-01', 2000000.00, TRUE,TRUE);
 
-
 INSERT INTO EvaluationCandidat (idCandidat, dateEvaluation, notes, commentaire, isEvalue) VALUES 
-(7, '2024-01-15', 30, null, TRUE),
-(8, '2024-01-15', 40,null, TRUE),
+(7, '2024-01-15', 20, null, TRUE),
+(8, '2024-01-15', 25,null, TRUE),
 (9, '2024-01-15', 25,null, TRUE),
-(10, '2024-01-15', 34,null, TRUE),
-(11, '2024-01-15', 26,null, TRUE),
-(12, '2024-01-15', 33,null, TRUE),
-(13, '2024-01-15', 20,null, TRUE),
-(14, '2024-02-01', 28,null, TRUE);
+(10, '2024-01-15', 22,null, TRUE);
+--(11, '2024-01-15', 26,null, TRUE),
+--(12, '2024-01-15', 33,null, TRUE),
+--(13, '2024-01-15', 20,null, TRUE),
+--(14, '2024-02-01', 28,null, TRUE);
+
+INSERT INTO droitConge (idEmploye,annee,totaljoursconges,joursutilises,joursrestants)
+values
+(15,2024,30.00,0.00,30.00),
+(16,2024,30.00,0.00,30.00),
+(17,2024,30.00,0.00,30.00),
+(18,2024,30.00,0.00,30.00);
